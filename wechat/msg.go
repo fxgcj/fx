@@ -9,17 +9,17 @@ import (
 )
 
 type Msg struct {
-	content []byte
-	w       http.ResponseWriter
-	req     *http.Request
+	content []byte              `orm:"-"`
+	w       http.ResponseWriter `orm:"-"`
+	req     *http.Request       `orm:"-"`
 
-	Id int64 `xml:"-"`
+	Id int64 `xml:"-",orm:"Id"`
 
-	MsgType      string `xml:"MsgType"`
-	Event        string `xml:"Event"`
-	ToUserName   string `xml:"ToUserName"`
-	FromUserName string `xml:"FromUserName"`
-	CreateTime   int    `xml:"CreateTime"`
+	MsgType      string `xml:"MsgType",orm:"MsgType"`
+	Event        string `xml:"Event",orm:"Event"`
+	ToUserName   string `xml:"ToUserName",orm:"ToUserName"`
+	FromUserName string `xml:"FromUserName",orm:"FromUserName"`
+	CreateTime   int    `xml:"CreateTime",orm:"CreateTime"`
 
 	CreatedLocal time.Time `orm:"auto_now_add;type(datetime)"`
 }
@@ -31,6 +31,8 @@ func Receive(w http.ResponseWriter, req *http.Request) {
 		log.Error(err.Error())
 		return
 	}
+	log.Debug("receive body: ", string(bs))
+
 	err = xml.Unmarshal(bs, msg)
 	if err != nil {
 		log.Error(err.Error())
@@ -40,8 +42,13 @@ func Receive(w http.ResponseWriter, req *http.Request) {
 	msg.w = w
 	msg.req = req
 
+	log.Debug("msg type: ", msg.MsgType)
+	log.Debug("msg from: ", msg.FromUserName)
+	log.Debug("msg to: ", msg.ToUserName)
+	log.Debug("msg create time: ", msg.CreateTime)
 	switch msg.MsgType {
 	case "event":
+		log.Debug("msg event type: ", msg.Event)
 		msg.ReceiveEvent()
 	default:
 		msg.ReceiveMsg()

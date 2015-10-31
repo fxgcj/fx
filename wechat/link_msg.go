@@ -2,7 +2,6 @@ package wechat
 
 import (
 	"encoding/xml"
-	"github.com/astaxie/beego/orm"
 )
 
 type LinkMsg struct {
@@ -23,10 +22,5 @@ func (m *Msg) ReceiveLinkMsg() string {
 }
 
 func (l *LinkMsg) Insert() error {
-	o := orm.NewOrm()
-	_, e := o.Insert(l)
-	if e != nil {
-		return e
-	}
 	return nil
 }

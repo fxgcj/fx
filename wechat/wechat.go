@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/ckeyer/fx/conf"
 	"github.com/ckeyer/fx/lib"
+	"github.com/ckeyer/fx/reply"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -11,6 +12,7 @@ var (
 	config       *conf.Config
 	log          = lib.GetLogger()
 	access_token string
+	replier      = reply.GetReplier()
 )
 
 func init() {
@@ -18,7 +20,7 @@ func init() {
 	if config == nil {
 		log.Panic("config is nil")
 	}
-
+	//	RegDB()
 }
 
 func RegDB() {

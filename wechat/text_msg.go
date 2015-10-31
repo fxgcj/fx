@@ -2,7 +2,6 @@ package wechat
 
 import (
 	"encoding/xml"
-	"github.com/astaxie/beego/orm"
 )
 
 type TextMsg struct {
@@ -11,12 +10,7 @@ type TextMsg struct {
 	MsgId   int64  `xml:"MsgId"`
 }
 
-func (this *TextMsg) Insert() error {
-	o := orm.NewOrm()
-	_, e := o.Insert(this)
-	if e != nil {
-		return e
-	}
+func (t *TextMsg) Insert() error {
 	return nil
 }
 
@@ -28,9 +22,8 @@ func (m *Msg) ReceiveTextMsg() {
 		return
 	}
 	msg.Insert()
-	log.Debug(msg.Content)
-
-	m.WriteText(`/::D/::D
-服务器维护中
-/::D/::D`)
+	ret := replier.Reply(msg.Content)
+	log.Notice("received: ", msg.Content)
+	log.Notice("replied: ", ret)
+	m.WriteText(ret)
 }

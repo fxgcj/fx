@@ -9,6 +9,7 @@ import (
 	"github.com/ckeyer/fx/wechat"
 	"io"
 	"sort"
+	"strings"
 )
 
 func Filter(w http.ResponseWriter, req *http.Request) {
@@ -16,14 +17,16 @@ func Filter(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Error(err)
 	}
-	if Auth(w, req) {
+	if !Auth(w, req) {
 		log.Notice("auth failed")
-		return
 	}
-	switch req.Method {
-	case "Get":
+	log.Debug("method: ", req.Method)
+	log.Debug("url: ", req.URL.String())
+
+	switch strings.ToUpper(req.Method) {
+	case "GET":
 		Get(w, req)
-	case "Post":
+	case "POST":
 		Post(w, req)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -36,6 +39,7 @@ func Auth(w http.ResponseWriter, req *http.Request) bool {
 	u, err := url.ParseQuery(query)
 	if err != nil {
 		log.Error(err)
+		return false
 	}
 	log.Debugf("url values: %#v\n", u)
 
@@ -53,10 +57,13 @@ func Auth(w http.ResponseWriter, req *http.Request) bool {
 		io.WriteString(t, data)
 		return fmt.Sprintf("%x", t.Sum(nil))
 	}(tmpStr)
+
 	if tmp == signature {
 		w.Write([]byte(echostr))
 		return true
 	}
+	log.Debug("auth receive: ", tmp)
+	log.Debug("auth should be: ", signature)
 	return false
 }
 

@@ -13,7 +13,7 @@ var (
 )
 
 func main() {
-	config = conf.GetConfig("/Users/ckeyer/code/go/src/github.com/ckeyer/fx/conf/v1.json")
+	config = conf.GetConfig()
 	if config == nil {
 		panic("config is nil ")
 	}
