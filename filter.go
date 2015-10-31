@@ -6,6 +6,7 @@ import (
 
 	"crypto/sha1"
 	"fmt"
+	"github.com/ckeyer/fx/wechat"
 	"io"
 	"sort"
 )
@@ -64,5 +65,5 @@ func Get(w http.ResponseWriter, req *http.Request) {
 }
 
 func Post(w http.ResponseWriter, req *http.Request) {
-
+	wechat.Receive(w, req)
 }

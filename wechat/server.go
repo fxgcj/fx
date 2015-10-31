@@ -5,14 +5,8 @@ package wechat
 
 import (
 	"encoding/json"
-	"encoding/xml"
-	"errors"
-	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -27,31 +21,26 @@ type AccessToken struct {
 	created     time.Time
 }
 
-type MsgType struct {
-	MsgType string `xml:"MsgType"`
-	Event   string `xml:"Event"`
-}
-
 // 更新微信的AccessToken到Redis中 key=REDIS_KEY_WC_ACCESS_TOKEN
 func UpdateAccessToken() (expires_in int, err error) {
 	url := "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" +
 		config.WeChat.AppId + "&secret=" + config.WeChat.AppSecret
 
-	if req, err := http.Get(url); err != nil || req.Status != http.StatusOK {
+	if req, err := http.Get(url); err != nil {
 		log.Error(err)
-		return
+		return 0, err
 	} else {
 		var v AccessToken
 		bs, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			log.Error(err)
-			return
+			return 0, err
 		}
 
 		err = json.Unmarshal(bs, &v)
 		if err != nil {
 			log.Error(err)
-			return
+			return 0, err
 		}
 		v.created = time.Now()
 
@@ -74,9 +63,5 @@ func AutoGetAccessToken() {
 }
 
 func GetAccessToken() string {
-	b, e := redcli.Get(REDIS_KEY_WC_ACCESS_TOKEN)
-	if e != nil {
-		log.Error(e.Error())
-	}
-	return fmt.Sprintf("%s", b)
+	return access_token
 }

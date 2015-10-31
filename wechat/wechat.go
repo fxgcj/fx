@@ -25,21 +25,10 @@ func RegDB() {
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
 	orm.RegisterDataBase("default", "mysql", config.Mysql.GetConnStr())
 
-	orm.RegisterModel()
-}
-
-func ReceiveMsg(content string) (r string) {
-	var msgtype MsgType
-	err := xml.Unmarshal([]byte(content), &msgtype)
-	if err != nil {
-		return
-	}
-	switch msgtype.MsgType {
-	// case "text", "image", "voice", "video", "location", "link":
-	case "event":
-		r = event.ReceiveEvent(content, msgtype.Event)
-	default:
-		r = msg.ReceiveMsg(content, msgtype.Event)
-	}
-	return
+	orm.RegisterModel(new(TextMsg),
+		new(ImageMsg),
+		new(LinkMsg),
+		new(LocationMsg),
+		new(VideoMsg),
+		new(VoiceMsg))
 }
