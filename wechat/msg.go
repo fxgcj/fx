@@ -96,7 +96,8 @@ func (m *Msg) ReceiveEvent() {
 func (m *Msg) WriteText(data string) {
 	xmlfmt := `<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%d</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[%s]]></Content></xml>`
 	body := fmt.Sprintf(xmlfmt, m.FromUserName, m.ToUserName, time.Now().Unix(), data)
-	log.Debug("send body: ", body)
+	log.Info("receive body: ", string(m.content))
+	log.Info("send body: ", body)
 	m.w.WriteHeader(http.StatusOK)
 	m.w.Write([]byte(body))
 }
