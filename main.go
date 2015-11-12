@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/ckeyer/fx/conf"
-	"github.com/ckeyer/fx/lib"
+	"github.com/fxgcj/fx/conf"
+	"github.com/fxgcj/fx/lib"
 	"net/http"
 )
 

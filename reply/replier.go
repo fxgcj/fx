@@ -1,7 +1,7 @@
 package reply
 
 import (
-	"github.com/ckeyer/fx/lib"
+	"github.com/fxgcj/fx/lib"
 )
 
 type Replier interface {

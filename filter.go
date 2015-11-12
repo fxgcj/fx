@@ -6,7 +6,7 @@ import (
 
 	"crypto/sha1"
 	"fmt"
-	"github.com/ckeyer/fx/wechat"
+	"github.com/fxgcj/fx/wechat"
 	"io"
 	"sort"
 	"strings"
@@ -69,6 +69,8 @@ func Auth(w http.ResponseWriter, req *http.Request) bool {
 
 func Get(w http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("风险观察君出海去了呢~.~/e@n"))
 }
 
 func Post(w http.ResponseWriter, req *http.Request) {

@@ -2,9 +2,9 @@ package wechat
 
 import (
 	"github.com/astaxie/beego/orm"
-	"github.com/ckeyer/fx/conf"
-	"github.com/ckeyer/fx/lib"
-	"github.com/ckeyer/fx/reply"
+	"github.com/fxgcj/fx/conf"
+	"github.com/fxgcj/fx/lib"
+	"github.com/fxgcj/fx/reply"
 	_ "github.com/go-sql-driver/mysql"
 )
 
